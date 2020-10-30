@@ -35,13 +35,21 @@ export default class Calculator extends Component {
             const currentOperation = this.state.operation
 
             const values = [...this.state.values]
-            
-            try {
-                values[0] = eval(`${values[0]} ${currentOperation} ${values[1]}` )
-            } catch(e) {
-                values[0] = this.state.values[0]
+    
+            if (currentOperation === '+') {
+                values[0] = values[0] + values[1]
+            } else if (currentOperation === '-') {
+                values[0] = values[0] - values[1]
+            } else if (currentOperation === '*') {
+                values[0] = values[0] * values[1]
+            } else if (currentOperation === '/') {
+                values[0] = values[0] / values[1]
+            } else if (currentOperation === '%') {
+                values[0] = values[0] / 100  
+            } else if (currentOperation === "+/-") {
+                values[0] = values[0] * -1
             } 
-              
+
             values[1] = 0
 
             this.setState({
@@ -78,9 +86,9 @@ export default class Calculator extends Component {
         return (
             <div className="calculator">
                 <Display value={this.state.displayValue} /> 
-                <Button label="AC" click={this.clearMemory} triple/>
-                {/* /* <Button label="+/-" click={this.setOperation} />
-                <Button label="%" click={this.setOperation} /> */}
+                <Button label="AC" click={this.clearMemory} />
+                <Button label="+/-" click={this.setOperation} />
+                <Button label="%" click={this.setOperation} />
                 <Button label="/" click={this.setOperation} operation/>
                 <Button label="7" click={this.addDigit} />
                 <Button label="8" click={this.addDigit} />
