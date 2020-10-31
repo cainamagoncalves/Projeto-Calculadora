@@ -14,28 +14,32 @@ const initialState ={
 
 export default class Calculator extends Component {
 
-    state = {...initialState}
+    state = {...initialState} // Estado inicial
 
     constructor(props) {
         super(props)
-        this.clearMemory = this.clearMemory.bind(this)
-        this.setOperation = this.setOperation.bind(this)
-        this.addDigit = this.addDigit.bind(this)
+        this.clearMemory = this.clearMemory.bind(this) // Limpa a memória
+        this.setOperation = this.setOperation.bind(this) // Seta a operação a ser feita
+        this.addDigit = this.addDigit.bind(this) // Adiciona digito que não for operador 
     }
 
     clearMemory() {
-        this.setState({...initialState})
+        this.setState({...initialState}) // Setando estado inicial para 0
     }
 
     setOperation(operation) {
-        if (this.state.current === 0) {
+        /* Caso esteja realizando operação com elemento de índice 0 (primeiro elem.)
+        passe a operação solicitada e avance para o índice 1 (para inserir o novo valor)*/
+        if (this.state.current === 0) { 
             this.setState({operation, current: 1, clearDisplay: true})
         } else {
-            const equals = operation === '='
-            const currentOperation = this.state.operation
+            const equals = operation === '=' // Clicar no = seta equals para true
+            const currentOperation = this.state.operation // Caso o usuário continue operação com o número atual, this.state.current != 0
 
             const values = [...this.state.values]
     
+            // Passando condições para as operações da calculadora.
+
             if (currentOperation === '+') {
                 values[0] = values[0] + values[1]
             } else if (currentOperation === '-') {
@@ -50,8 +54,6 @@ export default class Calculator extends Component {
                 values[0] = values[0] * -1
             } 
 
-            values[1] = 0
-
             this.setState({
                 displayValue: values[0],
                 operation: equals ? null : operation,
@@ -63,6 +65,7 @@ export default class Calculator extends Component {
     }
 
     addDigit(n) {
+        // Se o dígito for . e já estiver incluso, ignore outras tentativas de colocá-lo.
         if(n === '.' && this.state.displayValue.includes('.')) {
             return
         }
@@ -74,6 +77,7 @@ export default class Calculator extends Component {
         this.setState({displayValue, clearDisplay: false})
 
         if (n !== '.') {
+            // Caso o dígito seja diferente de .
             const i = this.state.current
             const newValue = parseFloat(displayValue) // Com exceção do . o display só irá mostrar valores de 0 - 9
             const values = [...this.state.values] // Clonando array
